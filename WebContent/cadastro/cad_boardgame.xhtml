@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" 
+	template="/template/template.xhtml">
+
+	<ui:define name="cabecalho">
+		<ui:include src="/includes/cabecalho.xhtml" />
+	</ui:define>
+	
+	<ui:define name="menu">
+		<ui:include src="/includes/menu.xhtml" />
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		
+		<h:form id="fTabela">
+		    <p:dataTable id="dtBoardGame" var="bg" value="#{boardgameBean.boardGames}" rows="10"
+                     paginator="true" emptyMessage="Nenhum registro encontrado!!!"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+                     	{PreviousPageLink} {PageLinks} {NextPageLink} 
+                     	{LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="5,10,15">
+                     
+                <f:facet name="header">Listagem de BoardGames</f:facet>
+		        
+		        <p:column headerText="ID">
+		            <h:outputText value="#{bg.id}" />
+		        </p:column>
+		 
+		        <p:column headerText="NOME">
+		            <h:outputText value="#{bg.nome}" />
+		        </p:column>
+		 
+		        <p:column headerText="FABRICANTE">
+		            <h:outputText value="#{bg.fabricante}" />
+		        </p:column>
+		 
+		        <p:column headerText="GENERO">
+		            <h:outputText value="#{bg.genero}" />
+		        </p:column>
+		        
+   		        <p:column headerText="DURACAO PARTIDA">
+		            <h:outputText value="#{bg.duracaoPartida}" />
+		        </p:column>
+		        
+   		        <p:column headerText="QUANTIDADE JOGADORES">
+		            <h:outputText value="#{bg.qtdJogadores}" />
+		        </p:column>
+		        
+				<p:column headerText="QUANTIDADE">
+		            <h:outputText value="#{bg.quantidade}" />
+		        </p:column>
+		        
+				<p:column headerText="VEZES JOGADO">
+		            <h:outputText value="#{bg.vezesJogado}" />
+		        </p:column>
+		        
+		        <p:column headerText="...">
+		            
+		            <p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgEditarBoardGame').show();"
+		            	actionListener="#{boardgameBean.prepararEditar}" 
+		            	update=":fEditar:pgEditar"/>
+		            
+		            <p:commandButton icon="ui-icon-trash" oncomplete="PF('dlgExcluirBoardGame').show();"
+		            	actionListener="#{boardgameBean.prepararExcluir}"
+		            	update=":fExcluir:pgExcluir"/>
+		            
+		        </p:column>
+		        
+		        <f:facet name="footer">
+		        	<p:commandButton value="Novo BoardGame" oncomplete="PF('dlgNovoBoardGame').show();"
+		        		actionListener="#{boardgameBean.prepararNovo}" update=":fCadastrar:pgCadastrar" />
+		        </f:facet>
+		        
+		    </p:dataTable>
+		    
+		</h:form>
+	
+		<p:dialog header="Novo BoardGame" widgetVar="dlgNovoBoardGame" 
+			height="180" width="400" modal="true" appendTo="@(body)"
+			draggable="false" resizable="false" closable="false" >
+		
+			<h:form id="fCadastrar">
+			
+				<p:panelGrid id="pgCadastrar" columns="2">
+					
+					<p:outputLabel value="Nome:" />
+					<p:inputText value="#{boardgameBean.boardGame.nome}" />
+					
+					<p:outputLabel value="Fabricante:" />
+					<p:inputText value="#{boardgameBean.boardGame.fabricante}" />
+					
+					<p:outputLabel value="Genero:" />
+					<p:inputText value="#{boardgameBean.boardGame.genero}" />
+					
+					<p:outputLabel value="DuracaoPartida:" />
+					<p:inputText value="#{boardgameBean.boardGame.duracaoPartida}" />
+					
+					<p:outputLabel value="QTDJogadores:" />
+					<p:inputText value="#{boardgameBean.boardGame.qtdJogadores}" />
+					
+					<p:outputLabel value="Quantidade:" />
+					<p:inputText value="#{boardgameBean.boardGame.quantidade}" />
+					
+					<p:outputLabel value="VezesJogado:" />
+					<p:inputText value="#{boardgameBean.boardGame.vezesJogado}" />
+					
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2">
+				
+					<p:commandButton value="Cadastrar" 
+						actionListener="#{boardgameBean.cadastrarBoardGame}" 
+						oncomplete="PF('dlgNovoBoardGame').hide();"
+						update=":fTabela:dtBoardGame" />
+					
+					<p:commandButton value="Cancelar" 
+						oncomplete="PF('dlgNovoBoardGame').hide();"/>
+				
+				</p:panelGrid>
+			
+			</h:form>
+		
+		</p:dialog>
+		
+		<p:dialog header="Editar BoardGame" widgetVar="dlgEditarBoardGame" 
+			height="180" width="400" modal="true" appendTo="@(body)"
+			draggable="false" resizable="false" closable="false" >
+		
+			<h:form id="fEditar">
+			
+				<p:panelGrid id="pgEditar" columns="2">
+					
+					<p:outputLabel value="ID:" />
+					<p:outputLabel value="#{boardgameBean.boardGame.id}" />
+					
+					<p:outputLabel value="Nome:" />
+					<p:inputText value="#{boardgameBean.boardGame.nome}" />
+					
+					<p:outputLabel value="Fabricante:" />
+					<p:inputText value="#{boardgameBean.boardGame.fabricante}" />
+					
+					<p:outputLabel value="Genero:" />
+					<p:inputText value="#{boardgameBean.boardGame.genero}" />
+					
+					<p:outputLabel value="DuracaoPartida:" />
+					<p:inputText value="#{boardgameBean.boardGame.duracaoPartida}" />
+					
+					<p:outputLabel value="QTDJogadores:" />
+					<p:inputText value="#{boardgameBean.boardGame.qtdJogadores}" />
+					
+					<p:outputLabel value="Quantidade:" />
+					<p:inputText value="#{boardgameBean.boardGame.quantidade}" />
+					
+					<p:outputLabel value="VezesJogado:" />
+					<p:inputText value="#{boardgameBean.boardGame.vezesJogado}" />
+				
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2">
+				
+					<p:commandButton value="Editar" 
+						actionListener="#{boardgameBean.editarBoardGame}" 
+						oncomplete="PF('dlgEditarBoardGame').hide();"
+						update=":fTabela:dtBoardGame" />
+					
+					<p:commandButton value="Cancelar" 
+						oncomplete="PF('dlgEditarBoardGame').hide();"/>
+				
+				</p:panelGrid>
+			
+			</h:form>
+		
+		</p:dialog>
+		
+		<p:dialog header="Excluir BoardGame" widgetVar="dlgExcluirBoardGame" 
+			height="180" width="400" modal="true" appendTo="@(body)"
+			draggable="false" resizable="false" closable="false" >
+		
+			<h:form id="fExcluir">
+			
+				<p:panelGrid id="pgExcluir" columns="2">
+					
+					<p:outputLabel value="ID:" />
+					<p:outputLabel value="#{boardgameBean.boardGame.id}" />
+					
+					<p:outputLabel value="Nome:" />
+					<p:outputLabel value="#{boardgameBean.boardGame.nome}" />
+				
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2">
+				
+					<p:commandButton value="Excluir" 
+						actionListener="#{boardgameBean.excluirBoardGame}" 
+						oncomplete="PF('dlgExcluirBoardGame').hide();"
+						update=":fTabela:dtBoardGame" />
+					
+					<p:commandButton value="Cancelar" 
+						oncomplete="PF('dlgExcluirBoardGame').hide();"/>
+				
+				</p:panelGrid>
+			
+			</h:form>
+		
+		</p:dialog>
+	
+	</ui:define>	
+	
+	<ui:define name="rodape">
+		<ui:include src="/includes/rodape.xhtml" />
+	</ui:define>
+	
+</ui:composition>

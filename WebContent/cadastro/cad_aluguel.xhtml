@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" 
+	template="/template/template.xhtml">
+
+	<ui:define name="cabecalho">
+		<ui:include src="/includes/cabecalho.xhtml" />
+	</ui:define>
+	
+	<ui:define name="menu">
+		<ui:include src="/includes/menu.xhtml" />
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		
+		<h:form id="fTabela">
+		    <p:dataTable id="dtAluguel" var="a" value="#{aluguelBean.alugueis}" rows="10"
+                     paginator="true" emptyMessage="Nenhum registro encontrado!!!"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+                     	{PreviousPageLink} {PageLinks} {NextPageLink} 
+                     	{LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="5,10,15">
+                     
+                <f:facet name="header">Listagem de Alugueis</f:facet>
+		        
+		        <p:column headerText="ID">
+		            <h:outputText value="#{a.id}" />
+		        </p:column>
+		 
+		        <p:column headerText="IDFUNCIONARIO">
+		            <h:outputText value="#{a.idFuncionario}" />
+		        </p:column>
+		 
+		        <p:column headerText="IDBOARDGAME">
+		            <h:outputText value="#{a.idBoardGame}" />
+		        </p:column>
+		 
+		        <p:column headerText="IDCLIENTE">
+		            <h:outputText value="#{a.idCliente}" />
+		        </p:column>
+		        
+   		        <p:column headerText="TEMPOALUGUEL">
+		            <h:outputText value="#{a.tempoaluguel}" />
+		        </p:column>
+		        
+   		        <p:column headerText="STATUS">
+		            <h:outputText value="#{a.status}" />
+		        </p:column>
+		        
+		        <p:column headerText="...">
+		            
+		            <p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgEditarAluguel').show();"
+		            	actionListener="#{aluguelBean.prepararEditar}" 
+		            	update=":fEditar:pgEditar"/>
+		            
+		            <p:commandButton icon="ui-icon-trash" oncomplete="PF('dlgExcluirAluguel').show();"
+		            	actionListener="#{aluguelBean.prepararExcluir}"
+		            	update=":fExcluir:pgExcluir"/>
+		            
+		        </p:column>
+		        
+		        <f:facet name="footer">
+		        	<p:commandButton value="Novo Aluguel" oncomplete="PF('dlgNovoAluguel').show();"
+		        		actionListener="#{aluguelBean.prepararNovo}" update=":fCadastrar:pgCadastrar" />
+		        </f:facet>
+		        
+		    </p:dataTable>
+		    
+		</h:form>
+	
+		<p:dialog header="Novo Aluguel" widgetVar="dlgNovoAluguel" 
+			height="180" width="400" modal="true" appendTo="@(body)"
+			draggable="false" resizable="false" closable="false" >
+		
+			<h:form id="fCadastrar">
+			
+				<p:panelGrid id="pgCadastrar" columns="2">
+					
+					<p:outputLabel value="IDFuncionario:" />
+					<p:inputText value="#{aluguelBean.aluguel.idFuncionario}" />
+					
+					<p:outputLabel value="IDBoardGame:" />
+					<p:inputText value="#{aluguelBean.aluguel.idBoardGame}" />
+					
+					<p:outputLabel value="IDCliente:" />
+					<p:inputText value="#{aluguelBean.aluguel.idCliente}" />
+					
+					<p:outputLabel value="TempoAluguel:" />
+					<p:inputText value="#{aluguelBean.aluguel.tempoaluguel}" />
+					
+					<p:outputLabel value="Status:" />
+					<p:inputText value="#{aluguelBean.aluguel.status}" />
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2">
+				
+					<p:commandButton value="Cadastrar" 
+						actionListener="#{aluguelBean.cadastrarAluguel}" 
+						oncomplete="PF('dlgNovoAluguel').hide();"
+						update=":fTabela:dtAluguel" />
+					
+					<p:commandButton value="Cancelar" 
+						oncomplete="PF('dlgNovoAluguel').hide();"/>
+				
+				</p:panelGrid>
+			
+			</h:form>
+		
+		</p:dialog>
+		
+		<p:dialog header="Editar Aluguel" widgetVar="dlgEditarAluguel" 
+			height="180" width="400" modal="true" appendTo="@(body)"
+			draggable="false" resizable="false" closable="false" >
+		
+			<h:form id="fEditar">
+			
+				<p:panelGrid id="pgEditar" columns="2">
+					
+					<p:outputLabel value="ID:" />
+					<p:outputLabel value="#{aluguelBean.aluguel.id}" />
+					
+					<p:outputLabel value="IDFuncionario:" />
+					<p:inputText value="#{aluguelBean.aluguel.idFuncionario}" />
+					
+					<p:outputLabel value="IDBoardGame:" />
+					<p:inputText value="#{aluguelBean.aluguel.idBoardGame}" />
+					
+					<p:outputLabel value="IDCliente:" />
+					<p:inputText value="#{aluguelBean.aluguel.idCliente}" />
+					
+					<p:outputLabel value="TempoAluguel:" />
+					<p:inputText value="#{aluguelBean.aluguel.tempoaluguel}" />
+					
+					<p:outputLabel value="Status:" />
+					<p:inputText value="#{aluguelBean.aluguel.status}" />
+				
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2">
+				
+					<p:commandButton value="Editar" 
+						actionListener="#{aluguelBean.editarAluguel}" 
+						oncomplete="PF('dlgEditarAluguel').hide();"
+						update=":fTabela:dtAluguel" />
+					
+					<p:commandButton value="Cancelar" 
+						oncomplete="PF('dlgEditarAluguel').hide();"/>
+				
+				</p:panelGrid>
+			
+			</h:form>
+		
+		</p:dialog>
+		
+		<p:dialog header="Excluir Aluguel" widgetVar="dlgExcluirAluguel" 
+			height="180" width="400" modal="true" appendTo="@(body)"
+			draggable="false" resizable="false" closable="false" >
+		
+			<h:form id="fExcluir">
+			
+				<p:panelGrid id="pgExcluir" columns="2">
+					
+					<p:outputLabel value="ID:" />
+					<p:outputLabel value="#{aluguelBean.aluguel.id}" />
+					
+					<p:outputLabel value="Nome:" />
+					<p:outputLabel value="#{aluguelBean.aluguel.nome}" />
+				
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2">
+				
+					<p:commandButton value="Excluir" 
+						actionListener="#{aluguelBean.excluirAluguel}" 
+						oncomplete="PF('dlgExcluirAluguel').hide();"
+						update=":fTabela:dtAluguel" />
+					
+					<p:commandButton value="Cancelar" 
+						oncomplete="PF('dlgExcluirAluguel').hide();"/>
+				
+				</p:panelGrid>
+			
+			</h:form>
+		
+		</p:dialog>
+	
+	</ui:define>	
+	
+	<ui:define name="rodape">
+		<ui:include src="/includes/rodape.xhtml" />
+	</ui:define>
+	
+</ui:composition>

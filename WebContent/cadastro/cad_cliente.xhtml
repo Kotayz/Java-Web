@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" 
+	template="/template/template.xhtml">
+
+	<ui:define name="cabecalho">
+		<ui:include src="/includes/cabecalho.xhtml" />
+	</ui:define>
+	
+	<ui:define name="menu">
+		<ui:include src="/includes/menu.xhtml" />
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		
+		<h:form id="fTabela">
+		    <p:dataTable id="dtCliente" var="c" value="#{clienteBean.clientes}" rows="10"
+                     paginator="true" emptyMessage="Nenhum registro encontrado!!!"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+                     	{PreviousPageLink} {PageLinks} {NextPageLink} 
+                     	{LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="5,10,15">
+                     
+                <f:facet name="header">Listagem de Clientes</f:facet>
+		        
+		        <p:column headerText="ID">
+		            <h:outputText value="#{c.id}" />
+		        </p:column>
+		 
+		        <p:column headerText="NOME">
+		            <h:outputText value="#{c.nome}" />
+		        </p:column>
+		 
+		        <p:column headerText="CPF">
+		            <h:outputText value="#{c.cpf}" />
+		        </p:column>
+		 
+		        <p:column headerText="TELEFONE">
+		            <h:outputText value="#{c.telefone}" />
+		        </p:column>
+		        
+		        <p:column headerText="...">
+		            
+		            <p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgEditarCliente').show();"
+		            	actionListener="#{clienteBean.prepararEditar}" 
+		            	update=":fEditar:pgEditar"/>
+		            
+		            <p:commandButton icon="ui-icon-trash" oncomplete="PF('dlgExcluirCliente').show();"
+		            	actionListener="#{clienteBean.prepararExcluir}"
+		            	update=":fExcluir:pgExcluir"/>
+		            
+		        </p:column>
+		        
+		        <f:facet name="footer">
+		        	<p:commandButton value="Novo Cliente" oncomplete="PF('dlgNovoCliente').show();"
+		        		actionListener="#{clienteBean.prepararNovo}" update=":fCadastrar:pgCadastrar" />
+		        </f:facet>
+		        
+		    </p:dataTable>
+		    
+		</h:form>
+	
+		<p:dialog header="Novo Cliente" widgetVar="dlgNovoCliente" 
+			height="180" width="400" modal="true" appendTo="@(body)"
+			draggable="false" resizable="false" closable="false" >
+		
+			<h:form id="fCadastrar">
+			
+				<p:panelGrid id="pgCadastrar" columns="2">
+					
+					<p:outputLabel value="Nome:" />
+					<p:inputText value="#{clienteBean.cliente.nome}" />
+					
+					<p:outputLabel value="CPF" />
+					<p:inputText value="#{clienteBean.cliente.cpf}" />
+					
+					<p:outputLabel value="TELEFONE" />
+					<p:inputText value="#{clienteBean.cliente.telefone}" />
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2">
+				
+					<p:commandButton value="Cadastrar" 
+						actionListener="#{clienteBean.cadastrarCliente}" 
+						oncomplete="PF('dlgNovoCliente').hide();"
+						update=":fTabela:dtCliente" />
+					
+					<p:commandButton value="Cancelar" 
+						oncomplete="PF('dlgNovoCliente').hide();"/>
+				
+				</p:panelGrid>
+			
+			</h:form>
+		
+		</p:dialog>
+		
+		<p:dialog header="Editar Cliente" widgetVar="dlgEditarCliente" 
+			height="180" width="400" modal="true" appendTo="@(body)"
+			draggable="false" resizable="false" closable="false" >
+		
+			<h:form id="fEditar">
+			
+				<p:panelGrid id="pgEditar" columns="2">
+					
+					<p:outputLabel value="ID:" />
+					<p:outputLabel value="#{clienteBean.cliente.id}" />
+					
+					<p:outputLabel value="Nome:" />
+					<p:inputText value="#{clienteBean.cliente.nome}" />
+					
+					<p:outputLabel value="CPF" />
+					<p:inputText value="#{clienteBean.cliente.cpf}" />
+					
+					<p:outputLabel value="TELEFONE" />
+					<p:inputText value="#{clienteBean.cliente.telefone}" />
+				
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2">
+				
+					<p:commandButton value="Editar" 
+						actionListener="#{clienteBean.editarCliente}" 
+						oncomplete="PF('dlgEditarCliente').hide();"
+						update=":fTabela:dtCliente" />
+					
+					<p:commandButton value="Cancelar" 
+						oncomplete="PF('dlgEditarCliente').hide();"/>
+				
+				</p:panelGrid>
+			
+			</h:form>
+		
+		</p:dialog>
+		
+		<p:dialog header="Excluir Cliente" widgetVar="dlgExcluirCliente" 
+			height="180" width="400" modal="true" appendTo="@(body)"
+			draggable="false" resizable="false" closable="false" >
+		
+			<h:form id="fExcluir">
+			
+				<p:panelGrid id="pgExcluir" columns="2">
+					
+					<p:outputLabel value="ID:" />
+					<p:outputLabel value="#{clienteBean.cliente.id}" />
+					
+					<p:outputLabel value="Nome:" />
+					<p:outputLabel value="#{clienteBean.cliente.nome}" />
+				
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2">
+				
+					<p:commandButton value="Excluir" 
+						actionListener="#{clienteBean.excluirCliente}" 
+						oncomplete="PF('dlgExcluirCliente').hide();"
+						update=":fTabela:dtCliente" />
+					
+					<p:commandButton value="Cancelar" 
+						oncomplete="PF('dlgExcluirCliente').hide();"/>
+				
+				</p:panelGrid>
+			
+			</h:form>
+		
+		</p:dialog>
+	
+	</ui:define>	
+	
+	<ui:define name="rodape">
+		<ui:include src="/includes/rodape.xhtml" />
+	</ui:define>
+	
+</ui:composition>

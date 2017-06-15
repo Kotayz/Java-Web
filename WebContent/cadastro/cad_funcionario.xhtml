@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" 
+	template="/template/template.xhtml">
+
+	<ui:define name="cabecalho">
+		<ui:include src="/includes/cabecalho.xhtml" />
+	</ui:define>
+	
+	<ui:define name="menu">
+		<ui:include src="/includes/menu.xhtml" />
+	</ui:define>
+	
+	<ui:define name="conteudo">
+		
+		<h:form id="fTabela">
+		    <p:dataTable id="dtFuncionario" var="f" value="#{funcionarioBean.funcionarios}" rows="10"
+                     paginator="true" emptyMessage="Nenhum registro encontrado!!!"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} 
+                     	{PreviousPageLink} {PageLinks} {NextPageLink} 
+                     	{LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="5,10,15">
+                     
+                <f:facet name="header">Listagem de Funcionários</f:facet>
+		        
+		        <p:column headerText="ID">
+		            <h:outputText value="#{f.id}" />
+		        </p:column>
+		 
+		        <p:column headerText="NOME">
+		            <h:outputText value="#{f.nome}" />
+		        </p:column>
+		 
+		        <p:column headerText="IDADE">
+		            <h:outputText value="#{f.idade}" />
+		        </p:column>
+		 
+		        <p:column headerText="CPF">
+		            <h:outputText value="#{f.cpf}" />
+		        </p:column>
+		        
+   		        <p:column headerText="RG">
+		            <h:outputText value="#{f.rg}" />
+		        </p:column>
+		        
+   		        <p:column headerText="ENDERECO">
+		            <h:outputText value="#{f.endereco}" />
+		        </p:column>
+		        
+				<p:column headerText="NUMERO">
+		            <h:outputText value="#{f.numendereco}" />
+		        </p:column>
+		        
+				<p:column headerText="CEP">
+		            <h:outputText value="#{f.cep}" />
+		        </p:column>
+		        
+				<p:column headerText="TELEFONE">
+		            <h:outputText value="#{f.telefone}" />
+		        </p:column>
+		        
+		        <p:column headerText="...">
+		            
+		            <p:commandButton icon="ui-icon-pencil" oncomplete="PF('dlgEditarFuncionario').show();"
+		            	actionListener="#{funcionarioBean.prepararEditar}" 
+		            	update=":fEditar:pgEditar"/>
+		            
+		            <p:commandButton icon="ui-icon-trash" oncomplete="PF('dlgExcluirFuncionario').show();"
+		            	actionListener="#{funcionarioBean.prepararExcluir}"
+		            	update=":fExcluir:pgExcluir"/>
+		            
+		        </p:column>
+		        
+		        <f:facet name="footer">
+		        	<p:commandButton value="Novo Funcionario" oncomplete="PF('dlgNovoFuncionario').show();"
+		        		actionListener="#{funcionarioBean.prepararNovo}" update=":fCadastrar:pgCadastrar" />
+		        </f:facet>
+		        
+		    </p:dataTable>
+		    
+		</h:form>
+	
+		<p:dialog header="Novo Funcionario" widgetVar="dlgNovoFuncionario" 
+			height="180" width="400" modal="true" appendTo="@(body)"
+			draggable="false" resizable="false" closable="false" >
+		
+			<h:form id="fCadastrar">
+			
+				<p:panelGrid id="pgCadastrar" columns="2">
+					
+					<p:outputLabel value="Nome:" />
+					<p:inputText value="#{funcionarioBean.funcionario.nome}" />
+					
+					<p:outputLabel value="Idade:" />
+					<p:inputText value="#{funcionarioBean.funcionario.idade}" />
+					
+					<p:outputLabel value="CPF:" />
+					<p:inputText value="#{funcionarioBean.funcionario.cpf}" />
+					
+					<p:outputLabel value="RG:" />
+					<p:inputText value="#{funcionarioBean.funcionario.rg}" />
+					
+					<p:outputLabel value="Endereço:" />
+					<p:inputText value="#{funcionarioBean.funcionario.endereco}" />
+					
+					<p:outputLabel value="Numero:" />
+					<p:inputText value="#{funcionarioBean.funcionario.numendereco}" />
+					
+					<p:outputLabel value="CEP:" />
+					<p:inputText value="#{funcionarioBean.funcionario.cep}" />
+					
+					<p:outputLabel value="Telefone:" />
+					<p:inputText value="#{funcionarioBean.funcionario.telefone}" />
+				
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2">
+				
+					<p:commandButton value="Cadastrar" 
+						actionListener="#{funcionarioBean.cadastrarFuncionario}" 
+						oncomplete="PF('dlgNovoFuncionario').hide();"
+						update=":fTabela:dtFuncionario" />
+					
+					<p:commandButton value="Cancelar" 
+						oncomplete="PF('dlgNovoFuncionario').hide();"/>
+				
+				</p:panelGrid>
+			
+			</h:form>
+		
+		</p:dialog>
+		
+		<p:dialog header="Editar Funcionario" widgetVar="dlgEditarFuncionario" 
+			height="180" width="400" modal="true" appendTo="@(body)"
+			draggable="false" resizable="false" closable="false" >
+		
+			<h:form id="fEditar">
+			
+				<p:panelGrid id="pgEditar" columns="2">
+					
+					<p:outputLabel value="ID:" />
+					<p:outputLabel value="#{funcionarioBean.funcionario.id}" />
+										
+					<p:outputLabel value="Nome:" />
+					<p:inputText value="#{funcionarioBean.funcionario.nome}" />
+					
+					<p:outputLabel value="Idade:" />
+					<p:inputText value="#{funcionarioBean.funcionario.idade}" />
+					
+					<p:outputLabel value="CPF:" />
+					<p:inputText value="#{funcionarioBean.funcionario.cpf}" />
+					
+					<p:outputLabel value="RG:" />
+					<p:inputText value="#{funcionarioBean.funcionario.rg}" />
+					
+					<p:outputLabel value="Endereço:" />
+					<p:inputText value="#{funcionarioBean.funcionario.endereco}" />
+					
+					<p:outputLabel value="Numero:" />
+					<p:inputText value="#{funcionarioBean.funcionario.numendereco}" />
+					
+					<p:outputLabel value="CEP:" />
+					<p:inputText value="#{funcionarioBean.funcionario.cep}" />
+					
+					<p:outputLabel value="Telefone:" />
+					<p:inputText value="#{funcionarioBean.funcionario.telefone}" />
+				
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2">
+				
+					<p:commandButton value="Editar" 
+						actionListener="#{funcionarioBean.editarFuncionario}" 
+						oncomplete="PF('dlgEditarFuncionario').hide();"
+						update=":fTabela:dtFuncionario" />
+					
+					<p:commandButton value="Cancelar" 
+						oncomplete="PF('dlgEditarFuncionario').hide();"/>
+				
+				</p:panelGrid>
+			
+			</h:form>
+		
+		</p:dialog>
+		
+		<p:dialog header="Excluir Funcionario" widgetVar="dlgExcluirFuncionario" 
+			height="180" width="400" modal="true" appendTo="@(body)"
+			draggable="false" resizable="false" closable="false" >
+		
+			<h:form id="fExcluir">
+			
+				<p:panelGrid id="pgExcluir" columns="2">
+					
+					<p:outputLabel value="ID:" />
+					<p:outputLabel value="#{funcionarioBean.funcionario.id}" />
+					
+					<p:outputLabel value="Nome:" />
+					<p:outputLabel value="#{funcionarioBean.funcionario.nome}" />
+				
+				</p:panelGrid>
+				
+				<p:panelGrid columns="2">
+				
+					<p:commandButton value="Excluir" 
+						actionListener="#{funcionarioBean.excluirFuncionario}" 
+						oncomplete="PF('dlgExcluirFuncionario').hide();"
+						update=":fTabela:dtFuncionario" />
+					
+					<p:commandButton value="Cancelar" 
+						oncomplete="PF('dlgExcluirFuncionario').hide();"/>
+				
+				</p:panelGrid>
+			
+			</h:form>
+		
+		</p:dialog>
+	
+	</ui:define>	
+	
+	<ui:define name="rodape">
+		<ui:include src="/includes/rodape.xhtml" />
+	</ui:define>
+	
+</ui:composition>
